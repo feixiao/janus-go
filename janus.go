@@ -73,6 +73,8 @@ type Gateway struct {
 func Connect(wsURL string) (*Gateway, error) {
 	websocket.DefaultDialer.Subprotocols = []string{"janus-protocol"}
 
+	websocket.DefaultDialer.HandshakeTimeout = 2 * time.Second
+
 	conn, _, err := websocket.DefaultDialer.Dial(wsURL, nil)
 
 	if err != nil {
