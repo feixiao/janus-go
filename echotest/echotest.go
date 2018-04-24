@@ -51,6 +51,7 @@ func main() {
 
 	fmt.Println(config)
 
+	// 连接ws server创建
 	gateway, err = janus.Connect(config.Path)
 	if err != nil {
 		fmt.Printf("Connect: %s\n", err)
@@ -85,6 +86,7 @@ func EchoTest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// 创建Session
 	session, err := gateway.Create()
 	if err != nil {
 		fmt.Printf("gateway.Create: %s\n", err)
@@ -92,8 +94,10 @@ func EchoTest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	stop := make(chan struct{})
+	// send keepalive message
 	go keepalive(session, stop)
 
+	// 创建Handle
 	handle, err := session.Attach("janus.plugin.echotest")
 	if err != nil {
 		fmt.Printf("session.Attach: %s\n", err)

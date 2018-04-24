@@ -45,31 +45,14 @@ type Gateway struct {
 
 	conn            *websocket.Conn
 	nextTransaction uint64
-	transactions    map[uint64]chan interface{}
+	transactions    map[uint64]chan interface{} // 接收回复的channel
 
 	sendChan chan []byte
 	writeMu  sync.Mutex
 }
 
 // Connect creates a new Gateway instance, connected to the Janus Gateway.
-// path should be a filesystem path to the Unix Socket that the Unix transport
-// is bound to.
 // On success, a new Gateway object will be returned and error will be nil.
-// func Connect(path string, netType string) (*Gateway, error) {
-// 	conn, err := net.Dial(netType, path)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	gateway := new(Gateway)
-// 	//gateway.conn = conn
-// 	gateway.transactions = make(map[uint64]chan interface{})
-// 	gateway.Sessions = make(map[uint64]*Session)
-
-// 	go gateway.recv()
-// 	return gateway, nil
-// }
-
 func Connect(wsURL string) (*Gateway, error) {
 	websocket.DefaultDialer.Subprotocols = []string{"janus-protocol"}
 
